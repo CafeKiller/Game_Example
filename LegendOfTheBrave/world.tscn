@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://dt4a0bc6c8fgv"]
+
+[ext_resource type="Texture2D" uid="uid://bl6s2pajcq2js" path="res://Tree-Assets.png" id="1_bxjio"]
+[ext_resource type="PackedScene" uid="uid://b3rr0675x8266" path="res://player.tscn" id="2_ahu8m"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_frkbe"]
+texture = ExtResource("1_bxjio")
+1:1/0 = 0
+1:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:1/0/physics_layer_0/angular_velocity = 0.0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:2/0 = 0
+1:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:2/0/physics_layer_0/angular_velocity = 0.0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_m83e1"]
+physics_layer_0/collision_layer = 1
+sources/1 = SubResource("TileSetAtlasSource_frkbe")
+
+[node name="World" type="Node2D"]
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_m83e1")
+format = 2
+layer_0/tile_data = PackedInt32Array(851968, 65537, 1, 851969, 65537, 1, 851970, 65537, 1, 851971, 65537, 1, 851972, 65537, 1, 851973, 65537, 1, 851974, 65537, 1, 851975, 65537, 1, 851976, 65537, 1, 851977, 65537, 1, 851978, 65537, 1, 851979, 65537, 1, 851980, 65537, 1, 851981, 65537, 1, 851982, 65537, 1, 851983, 65537, 1, 851984, 65537, 1, 851985, 65537, 1, 851986, 65537, 1, 851987, 65537, 1, 851988, 65537, 1, 851989, 65537, 1, 851990, 65537, 1, 851991, 65537, 1, 786440, 65537, 1, 786441, 65537, 1, 786442, 65537, 1, 786443, 65537, 1, 786444, 65537, 1, 786445, 65537, 1, 786446, 65537, 1, 786447, 65537, 1, 524304, 65537, 1, 524305, 65537, 1, 524306, 65537, 1, 524307, 65537, 1, 917504, 65537, 1, 917505, 65537, 1, 917506, 65537, 1, 917507, 65537, 1, 917508, 65537, 1, 917509, 65537, 1, 917510, 65537, 1, 917511, 65537, 1, 917512, 65537, 1, 917513, 65537, 1, 917514, 65537, 1, 917515, 65537, 1, 917516, 65537, 1, 917517, 65537, 1, 917518, 65537, 1, 917519, 65537, 1, 851992, 65537, 1, 917525, 65537, 1, 917524, 65537, 1, 917523, 65537, 1, 917522, 65537, 1, 917521, 65537, 1, 917520, 65537, 1, 917527, 65537, 1, 917526, 65537, 1, 917528, 65537, 1)
+
+[node name="Player" parent="." instance=ExtResource("2_ahu8m")]
+position = Vector2(65, 71)
