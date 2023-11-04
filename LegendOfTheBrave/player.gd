@@ -13,7 +13,7 @@ const JUMP_VELOCITY := -300.0
 var gravity := ProjectSettings.get("physics/2d/default_gravity") as float
 
 # 获取实体
-@onready var sprite_2d = $Sprite2D
+@onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var animation_player = $AnimationPlayer
 
 # 每帧物理调整
