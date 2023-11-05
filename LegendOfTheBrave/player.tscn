@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://b3rr0675x8266"]
 
-[ext_resource type="Texture2D" uid="uid://dpr08f5li1vlp" path="res://char_blue_1.png" id="1_264sn"]
+[ext_resource type="Texture2D" uid="uid://dpr08f5li1vlp" path="res://assets/generic_char/char_blue_1.png" id="1_264sn"]
 [ext_resource type="Script" path="res://player.gd" id="1_gssh0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xsox8"]
@@ -194,3 +194,11 @@ shape = SubResource("RectangleShape2D_xsox8")
 libraries = {
 "": SubResource("AnimationLibrary_7ki1l")
 }
+
+[node name="CoyoteTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="JumpRequestTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true

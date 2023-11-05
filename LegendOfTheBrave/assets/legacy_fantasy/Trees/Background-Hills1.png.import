@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bl6s2pajcq2js"
-path="res://.godot/imported/Tree-Assets.png-458b6c2f31455ad173aaf2ab32274ad3.ctex"
+uid="uid://ba6c8le4sw2wp"
+path="res://.godot/imported/Background-Hills1.png-4867822274a56a35798ae57c602c7cc8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Tree-Assets.png"
-dest_files=["res://.godot/imported/Tree-Assets.png-458b6c2f31455ad173aaf2ab32274ad3.ctex"]
+source_file="res://assets/legacy_fantasy/Trees/Background-Hills1.png"
+dest_files=["res://.godot/imported/Background-Hills1.png-4867822274a56a35798ae57c602c7cc8.ctex"]
 
 [params]
 
