@@ -1,9 +1,9 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1699150821
-player.gd::GDScript::-1::1699113395::0::1::::<>CharacterBody2D<>::
-player.tscn::PackedScene::4387881240154399841::1699150821::0::1::::<><>::uid://dpr08f5li1vlp::::res://assets/generic_char/char_blue_1.png<>res://player.gd
+::res://::1699702397
+player.gd::GDScript::-1::1699701418::0::1::::<>CharacterBody2D<>::
+player.tscn::PackedScene::4387881240154399841::1699702384::0::1::::<><>::uid://dpr08f5li1vlp::::res://assets/generic_char/char_blue_1.png<>res://player.gd
 world.gd::GDScript::-1::1699116693::0::1::::<>Node2D<>::
-world.tscn::PackedScene::8552761736942707197::1699150821::0::1::::<><>::res://world.gd<>uid://b3rr0675x8266::::res://player.tscn<>uid://bl6s2pajcq2js::::res://assets/legacy_fantasy/Trees/Tree-Assets.png<>uid://8e6slyip6fhg::::res://assets/legacy_fantasy/Background/Background.png<>uid://5724cpofq8k0::::res://assets/legacy_fantasy/Trees/Background.png
+world.tscn::PackedScene::8552761736942707197::1699701867::0::1::::<><>::res://world.gd<>uid://b3rr0675x8266::::res://player.tscn<>uid://bl6s2pajcq2js::::res://assets/legacy_fantasy/Trees/Tree-Assets.png<>uid://8e6slyip6fhg::::res://assets/legacy_fantasy/Background/Background.png<>uid://ba6c8le4sw2wp::::res://assets/legacy_fantasy/Trees/Background-Hills1.png<>uid://bs15kny8hxcim::::res://assets/legacy_fantasy/Trees/Background-Trees1.png
 ::res://assets/::1699149715
 icon.svg::CompressedTexture2D::4100836066729143970::1699105869::1699149652::1::::<><>::
 ::res://assets/generic_char/::1699149754
@@ -11,7 +11,7 @@ char_blue_1.png::CompressedTexture2D::8248766292959238409::1573729595::169914973
 ::res://assets/legacy_fantasy/::1699149826
 ::res://assets/legacy_fantasy/Background/::1699149817
 Background.png::CompressedTexture2D::2326404337354266736::1667209646::1699149817::1::::<><>::
-::res://assets/legacy_fantasy/Trees/::1699151146
+::res://assets/legacy_fantasy/Trees/::1699151237
 Background-Hills1.png::CompressedTexture2D::2450597344531995863::1699151210::1699151237::1::::<><>::
 Background-Trees1.png::CompressedTexture2D::3705333779893768812::1699151072::1699151146::1::::<><>::
 Background.png::CompressedTexture2D::2173416672961032385::1664872680::1699149889::1::::<><>::

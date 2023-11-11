@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://b3rr0675x8266"]
+[gd_scene load_steps=12 format=3 uid="uid://b3rr0675x8266"]
 
 [ext_resource type="Texture2D" uid="uid://dpr08f5li1vlp" path="res://assets/generic_char/char_blue_1.png" id="1_264sn"]
 [ext_resource type="Script" path="res://player.gd" id="1_gssh0"]
+[ext_resource type="Script" path="res://classes/StateMachin.gd" id="3_aklol"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xsox8"]
 size = Vector2(8, 29)
@@ -168,11 +169,94 @@ tracks/2/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7]
 }
 
+[sub_resource type="Animation" id="Animation_q8guv"]
+resource_name = "landing"
+length = 0.25
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(280, 224, 168, 56)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [3]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+
+[sub_resource type="Animation" id="Animation_kpjh5"]
+resource_name = "fall"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(56, 224, 224, 56)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7ki1l"]
 _data = {
 "RESET": SubResource("Animation_d2anj"),
+"fall": SubResource("Animation_kpjh5"),
 "idle": SubResource("Animation_40bjd"),
 "jump": SubResource("Animation_c0hdh"),
+"landing": SubResource("Animation_q8guv"),
 "running": SubResource("Animation_y171r")
 }
 
@@ -191,6 +275,7 @@ position = Vector2(0, -14.5)
 shape = SubResource("RectangleShape2D_xsox8")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+speed_scale = 0.5
 libraries = {
 "": SubResource("AnimationLibrary_7ki1l")
 }
@@ -202,3 +287,6 @@ one_shot = true
 [node name="JumpRequestTimer" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
+
+[node name="StateMachin" type="Node" parent="."]
+script = ExtResource("3_aklol")
