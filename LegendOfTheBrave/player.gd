@@ -12,6 +12,7 @@ enum State {
 	JUMP,
 	FALL,
 	LANDING,
+	WALL_SLIDING,
 }
 
 const GROUND_STATES := [State.IDLE, State.RUNNING, State.LANDING]
@@ -21,14 +22,17 @@ const AIR_ACCELRATION := RUN_SPEED / 0.02 	# 处于浮空时的加速度
 const JUMP_VELOCITY := -300.0
 
 # 获取重力加速度 (通过项目设置获取)
+# var gravity := ProjectSettings.get("physics/2d/default_gravity") as float
 var default_gravity := ProjectSettings.get("physics/2d/default_gravity") as float
 var is_first_tick := false
 
 # 获取实体
-@onready var sprite_2d: Sprite2D = $Sprite2D
+@onready var graphics: Node2D = $Graphics
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var jump_request_timer: Timer = $JumpRequestTimer
+@onready var hand_checker: RayCast2D = $Graphics/HandChecker
+@onready var foot_checker: RayCast2D = $Graphics/FootChecker
 
 # 检测玩家输入
 func _unhandled_input(event: InputEvent) -> void:
@@ -44,6 +48,19 @@ func _unhandled_input(event: InputEvent) -> void:
 		if velocity.y < JUMP_VELOCITY / 2:
 			velocity.y = JUMP_VELOCITY / 2 
 
+# func _physics_process(delta: float) -> void:
+# 	# 获取玩家键盘输入
+# 	var direction := Input.get_axis("move_left", "move_right")
+# 	# 控制加速 地面的加速度 与 空中的加速度是不一样的.
+# 	var acceleration := FLOOR_ACCELRATION if is_on_floor() else AIR_ACCELRATION
+# 	# 为角色运动添加: 加速度系数
+# 	velocity.x = move_toward(velocity.x, direction * RUN_SPEED, acceleration * delta) 
+# 	velocity.y += gravity * delta
+#	# 设置郊狼时间 让角色在浮空的一定时间内也可以完成跳跃操作
+#		var can_jump := is_on_floor() or coyote_timer.time_left > 0
+#		var should_jump := can_jump and jump_request_timer.time_left > 0
+#		if should_jump:
+#			velocity.y = JUMP_VELOCITY
 
 # 每帧物理调整
 func tick_physics(state: State, delta: float) -> void:
@@ -65,6 +82,10 @@ func tick_physics(state: State, delta: float) -> void:
 		State.LANDING:
 			move(default_gravity, delta)
 			
+		State.WALL_SLIDING:
+			move(default_gravity / 2, delta)
+			graphics.scale.x = get_wall_normal().x
+			
 	is_first_tick = false
 	
 func move(gravity: float, delta: float) -> void:
@@ -78,7 +99,7 @@ func move(gravity: float, delta: float) -> void:
 			
 	# 由于动画都是只展示一侧的, 需要在玩家向左移动时添加镜像反转
 	if not is_zero_approx(direction):
-		sprite_2d.flip_h = direction < 0
+		graphics.scale.x = -1 if direction < 0 else 1
 	
 	move_and_slide()
 	
@@ -121,10 +142,20 @@ func get_next_state(state: State) -> State:
 		State.FALL:
 			if is_on_floor():
 				return State.LANDING if is_still else State.RUNNING
+			if is_on_wall() and hand_checker.is_colliding() and foot_checker.is_colliding():
+				return State.WALL_SLIDING
 				
 		State.LANDING:
+			if not is_still:
+				return State.RUNNING
 			if not animation_player.is_playing():
 				return State.IDLE
+				
+		State.WALL_SLIDING:
+			if is_on_floor():
+				return State.IDLE
+			if not is_on_wall():
+				return State.FALL
 	
 	return state		
 	
@@ -153,5 +184,8 @@ func transition_state(from: State, to: State) -> void:
 		
 		State.LANDING:
 			animation_player.play("landing")
+			
+		State.WALL_SLIDING:
+			animation_player.play("wall_sliding")
 				
 	is_first_tick = true

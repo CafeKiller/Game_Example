@@ -1,3 +1,9 @@
+"""
+@file: 通用状态机对象
+@author: CoffeeKiller
+@date: 2023_11_11
+"""
+
 class_name StateMachin
 extends Node
 
