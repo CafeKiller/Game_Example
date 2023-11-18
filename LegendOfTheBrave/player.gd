@@ -13,13 +13,15 @@ enum State {
 	FALL,
 	LANDING,
 	WALL_SLIDING,
+	WALL_JUMP
 }
 
 const GROUND_STATES := [State.IDLE, State.RUNNING, State.LANDING]
 const RUN_SPEED := 160.0
 const FLOOR_ACCELRATION := RUN_SPEED / 0.2 	# 处于地面时的加速度
-const AIR_ACCELRATION := RUN_SPEED / 0.02 	# 处于浮空时的加速度
+const AIR_ACCELRATION := RUN_SPEED / 0.1 	# 处于浮空时的加速度
 const JUMP_VELOCITY := -300.0
+const WALL_JUMP_VELOCITY := Vector2(380, -280)
 
 # 获取重力加速度 (通过项目设置获取)
 # var gravity := ProjectSettings.get("physics/2d/default_gravity") as float
@@ -33,6 +35,7 @@ var is_first_tick := false
 @onready var jump_request_timer: Timer = $JumpRequestTimer
 @onready var hand_checker: RayCast2D = $Graphics/HandChecker
 @onready var foot_checker: RayCast2D = $Graphics/FootChecker
+@onready var state_machin: Node = $StateMachin
 
 # 检测玩家输入
 func _unhandled_input(event: InputEvent) -> void:
@@ -62,6 +65,9 @@ func _unhandled_input(event: InputEvent) -> void:
 #		if should_jump:
 #			velocity.y = JUMP_VELOCITY
 
+func can_wall_slide() -> bool:
+	return is_on_wall() and hand_checker.is_colliding() and foot_checker.is_colliding()
+
 # 每帧物理调整
 func tick_physics(state: State, delta: float) -> void:
 	
@@ -80,11 +86,21 @@ func tick_physics(state: State, delta: float) -> void:
 			move(default_gravity, delta)
 			
 		State.LANDING:
-			move(default_gravity, delta)
+			# move(default_gravity, delta)
+			stand(default_gravity, delta)
 			
 		State.WALL_SLIDING:
 			move(default_gravity / 2, delta)
 			graphics.scale.x = get_wall_normal().x
+			
+		State.WALL_JUMP:
+			if state_machin.state_time < 0.1 :
+				var temp = 0.0 if is_first_tick else default_gravity
+				stand(temp, delta)
+				graphics.scale.x = get_wall_normal().x
+			else:
+				# var temp = 0.0 if is_first_tick else default_gravity
+				move(default_gravity, delta)
 			
 	is_first_tick = false
 	
@@ -103,13 +119,13 @@ func move(gravity: float, delta: float) -> void:
 	
 	move_and_slide()
 	
-func stand(delta: float) -> void:
+func stand(gravity:float, delta: float) -> void:
 	
 	# 控制加速 地面的加速度 与 空中的加速度是不一样的.
 	var acceleration := FLOOR_ACCELRATION if is_on_floor() else AIR_ACCELRATION
 	# 为角色运动添加: 加速度系数
 	velocity.x = move_toward(velocity.x, 0.0, acceleration * delta) 
-	velocity.y += default_gravity * delta
+	velocity.y += gravity * delta
 	
 	move_and_slide()
 	
@@ -142,7 +158,7 @@ func get_next_state(state: State) -> State:
 		State.FALL:
 			if is_on_floor():
 				return State.LANDING if is_still else State.RUNNING
-			if is_on_wall() and hand_checker.is_colliding() and foot_checker.is_colliding():
+			if can_wall_slide():
 				return State.WALL_SLIDING
 				
 		State.LANDING:
@@ -152,14 +168,29 @@ func get_next_state(state: State) -> State:
 				return State.IDLE
 				
 		State.WALL_SLIDING:
+			if jump_request_timer.time_left > 0:
+				return State.WALL_JUMP
 			if is_on_floor():
 				return State.IDLE
 			if not is_on_wall():
 				return State.FALL
+		
+		State.WALL_JUMP:
+			if can_wall_slide() and not is_first_tick:
+				return State.WALL_SLIDING
+			if velocity.y >= 0:
+				return State.FALL
+		
 	
 	return state		
 	
 func transition_state(from: State, to: State) -> void:
+	
+	print("[%s] %s => %s" % [
+		Engine.get_physics_frames(),
+		State.keys()[from] if from != 1 else "<START>",
+		State.keys()[to],		
+	])
 	
 	if from not in GROUND_STATES and to in GROUND_STATES:
 		coyote_timer.stop()
@@ -187,5 +218,16 @@ func transition_state(from: State, to: State) -> void:
 			
 		State.WALL_SLIDING:
 			animation_player.play("wall_sliding")
+			
+		State.WALL_JUMP:
+			animation_player.play("jump")
+			velocity = WALL_JUMP_VELOCITY
+			velocity.x *= get_wall_normal().x
+			jump_request_timer.stop()
+			
+#	if to == State.WALL_JUMP:
+#		Engine.time_scale = 0.3
+#	if from == State.WALL_JUMP:
+#		Engine.time_scale = 1
 				
 	is_first_tick = true
