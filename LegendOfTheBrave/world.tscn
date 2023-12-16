@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dt4a0bc6c8fgv"]
+[gd_scene load_steps=10 format=3 uid="uid://dt4a0bc6c8fgv"]
 
 [ext_resource type="Script" path="res://world.gd" id="1_mgdfq"]
 [ext_resource type="PackedScene" uid="uid://b3rr0675x8266" path="res://player.tscn" id="2_ahu8m"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://8e6slyip6fhg" path="res://assets/legacy_fantasy/Background/Background.png" id="4_f4b8v"]
 [ext_resource type="Texture2D" uid="uid://ba6c8le4sw2wp" path="res://assets/legacy_fantasy/Trees/Background-Hills1.png" id="5_emjjo"]
 [ext_resource type="Texture2D" uid="uid://bs15kny8hxcim" path="res://assets/legacy_fantasy/Trees/Background-Trees1.png" id="6_7iclu"]
+[ext_resource type="PackedScene" uid="uid://bx5x6qyvhh2mc" path="res://enemies/boar.tscn" id="7_8boek"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_frkbe"]
 texture = ExtResource("2_ml41h")
@@ -815,3 +816,6 @@ position = Vector2(90, -32)
 texture = ExtResource("2_ml41h")
 region_enabled = true
 region_rect = Rect2(210, 293, 124, 86)
+
+[node name="Boar" parent="." instance=ExtResource("7_8boek")]
+position = Vector2(856, 61)
