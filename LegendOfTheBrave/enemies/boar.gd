@@ -12,6 +12,18 @@ enum State {
 @onready var floor_checker: RayCast2D = $Graphics/FloorChecker
 @onready var calm_down_timer: Timer = $CalmDownTimer
 
+# 用于处理 敌人 可以无视地形障碍物看见 玩家 的问题
+func can_see_player() -> bool:
+	if not player_checker.is_colliding():
+		return false
+	
+	# BUG: 部分版本中 返回的 null 值无法转换为 bool 值, 需要手动转换
+	# return player_checker.get_collider() is Player
+	
+	if player_checker.get_collider() is Player:
+		return true
+	return false
+
 func tick_physics(state: State, delta: float) -> void:
 	match state:
 		State.IDLE:
@@ -24,12 +36,12 @@ func tick_physics(state: State, delta: float) -> void:
 			if wall_checker.is_colliding() or not floor_checker.is_colliding():
 				direction *= -1
 			move(max_speed, delta)
-			if player_checker.is_colliding():
+			if can_see_player():
 				calm_down_timer.start()
 			
 
 func get_next_state(state: State) -> State:
-	if player_checker.is_colliding():
+	if can_see_player():
 		return State.RUN
 		
 	match state:
