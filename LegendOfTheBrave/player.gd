@@ -3,9 +3,12 @@
 @author: CoffeeKiller
 @date: 2023_11_04
 """
-
+class_name Player
 extends CharacterBody2D
 
+"""
+@enum State 玩家状态
+"""
 enum State {
 	IDLE,
 	RUNNING,
@@ -13,20 +16,29 @@ enum State {
 	FALL,
 	LANDING,
 	WALL_SLIDING,
-	WALL_JUMP
+	WALL_JUMP,
+	ATTACK_1,
+	ATTACK_2,
+	ATTACK_3,
 }
 
-const GROUND_STATES := [State.IDLE, State.RUNNING, State.LANDING]
+const GROUND_STATES := [
+	State.IDLE, State.RUNNING, State.LANDING,
+	State.ATTACK_1, State.ATTACK_2, State.ATTACK_3,
+]
 const RUN_SPEED := 160.0
 const FLOOR_ACCELRATION := RUN_SPEED / 0.2 	# 处于地面时的加速度
 const AIR_ACCELRATION := RUN_SPEED / 0.1 	# 处于浮空时的加速度
 const JUMP_VELOCITY := -300.0
 const WALL_JUMP_VELOCITY := Vector2(380, -280)
 
+@export var can_combo := false
+
 # 获取重力加速度 (通过项目设置获取)
 # var gravity := ProjectSettings.get("physics/2d/default_gravity") as float
 var default_gravity := ProjectSettings.get("physics/2d/default_gravity") as float
 var is_first_tick := false
+var is_combo_requested := false
 
 # 获取实体
 @onready var graphics: Node2D = $Graphics
@@ -50,6 +62,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		# 如果没有就直接减少跳跃高度,提前结束跳跃
 		if velocity.y < JUMP_VELOCITY / 2:
 			velocity.y = JUMP_VELOCITY / 2 
+	
+	# 判断是否按下攻击并且在 combo 时机内
+	if event.is_action_pressed("attack") and can_combo:
+		is_combo_requested = true
+		
 
 # func _physics_process(delta: float) -> void:
 # 	# 获取玩家键盘输入
@@ -101,6 +118,9 @@ func tick_physics(state: State, delta: float) -> void:
 			else:
 				# var temp = 0.0 if is_first_tick else default_gravity
 				move(default_gravity, delta)
+				
+		State.ATTACK_1, State.ATTACK_2, State.ATTACK_3:
+			stand(default_gravity, delta)
 			
 	is_first_tick = false
 	
@@ -136,18 +156,23 @@ func get_next_state(state: State) -> State:
 	var should_jump := can_jump and jump_request_timer.time_left > 0
 	if should_jump:
 		return State.JUMP
+		
+	if state in GROUND_STATES and not is_on_floor():
+		return State.FALL
 	
 	var direction := Input.get_axis("move_left", "move_right")
 	var is_still := is_zero_approx(direction) and is_zero_approx(velocity.x)
 	
 	match state:
 		State.IDLE:
-			if not is_on_floor():
-				return State.FALL
+			if Input.is_action_just_pressed("attack"):
+				return State.ATTACK_1
 			if not is_still:
 				return State.RUNNING
 			
 		State.RUNNING:
+			if Input.is_action_just_pressed("attack"):
+				return State.ATTACK_1
 			if is_still:
 				return State.IDLE
 			
@@ -180,6 +205,20 @@ func get_next_state(state: State) -> State:
 				return State.WALL_SLIDING
 			if velocity.y >= 0:
 				return State.FALL
+				
+		State.ATTACK_1:
+			if not animation_player.is_playing():
+				# 判断是否处于 combo 状态下, 如果不是则进入 IDLE 状态.
+				return State.ATTACK_2 if is_combo_requested else State.IDLE
+		
+		State.ATTACK_2:
+			if not animation_player.is_playing():
+				# 判断是否处于 combo 状态下, 如果不是则进入 IDLE 状态.
+				return State.ATTACK_3 if is_combo_requested else State.IDLE
+				
+		State.ATTACK_3:
+			if not animation_player.is_playing():
+				return State.IDLE
 		
 	
 	return state		
@@ -224,6 +263,18 @@ func transition_state(from: State, to: State) -> void:
 			velocity = WALL_JUMP_VELOCITY
 			velocity.x *= get_wall_normal().x
 			jump_request_timer.stop()
+			
+		State.ATTACK_1:
+			animation_player.play("attack_1")
+			is_combo_requested = false
+			
+		State.ATTACK_2:
+			animation_player.play("attack_2")
+			is_combo_requested = false
+			
+		State.ATTACK_3:
+			animation_player.play("attack_3")
+			is_combo_requested = false
 			
 #	if to == State.WALL_JUMP:
 #		Engine.time_scale = 0.3
