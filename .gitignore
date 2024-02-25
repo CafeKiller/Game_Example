@@ -6,4 +6,7 @@ node_modules
 */.vscode
 */.idea
 
+.godot
+*/.godot/*
+*.import
 */.godot/*
