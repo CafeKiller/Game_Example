@@ -1,8 +1,10 @@
+CollisionShape2D
+Hurtbox
+Hitbox
 Timer
 RayCast2D
 StateMachin
 AnimationPlayer
-CollisionShape2D
 Sprite2D
 Node2D
 CharacterBody2D

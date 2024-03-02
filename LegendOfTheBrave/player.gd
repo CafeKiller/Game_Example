@@ -10,14 +10,14 @@ extends CharacterBody2D
 @enum State 玩家状态
 """
 enum State {
-	IDLE,
-	RUNNING,
-	JUMP,
-	FALL,
-	LANDING,
+	IDLE, # 闲置
+	RUNNING, # 跑动
+	JUMP, # 跳跃
+	FALL,# 下落
+	LANDING,# 着陆
 	WALL_SLIDING,
 	WALL_JUMP,
-	ATTACK_1,
+	ATTACK_1, # 攻击
 	ATTACK_2,
 	ATTACK_3,
 }
@@ -149,7 +149,7 @@ func stand(gravity:float, delta: float) -> void:
 	
 	move_and_slide()
 	
-
+# 切换下一个状态 (自动调用)
 func get_next_state(state: State) -> State:
 	
 	var can_jump := is_on_floor() or coyote_timer.time_left > 0
@@ -225,14 +225,15 @@ func get_next_state(state: State) -> State:
 	
 func transition_state(from: State, to: State) -> void:
 	
-	print("<Player> [%s] %s => %s" % [
-		Engine.get_physics_frames(),
-		State.keys()[from] if from != 1 else "<START>",
-		State.keys()[to],		
-	])
+#	print("<Player> [%s] %s => %s" % [
+#		Engine.get_physics_frames(),
+#		State.keys()[from] if from != 1 else "<START>",
+#		State.keys()[to],		
+#	])
 	
 	if from not in GROUND_STATES and to in GROUND_STATES:
 		coyote_timer.stop()
+		
 	
 	match to:
 		State.IDLE:

@@ -1,9 +1,9 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1708849389
-player.gd::GDScript::-1::1708848985::0::1::::Player<>CharacterBody2D<>::
-player.tscn::PackedScene::4387881240154399841::1708849183::0::1::::<><>::uid://dpr08f5li1vlp::::res://assets/generic_char/char_blue_1.png<>res://player.gd<>res://classes/StateMachin.gd<>uid://bs2jdxdhbfws4::::res://assets/generic_char/char_blue_2.png
+::res://::1709367397
+player.gd::GDScript::-1::1708867576::0::1::::Player<>CharacterBody2D<>::
+player.tscn::PackedScene::4387881240154399841::1709367390::0::1::::<><>::uid://dpr08f5li1vlp::::res://assets/generic_char/char_blue_1.png<>res://player.gd<>res://classes/StateMachin.gd<>uid://bs2jdxdhbfws4::::res://assets/generic_char/char_blue_2.png
 world.gd::GDScript::-1::1699116693::0::1::::<>Node2D<>::
-world.tscn::PackedScene::8552761736942707197::1708849183::0::1::::<><>::res://world.gd<>uid://b3rr0675x8266::::res://player.tscn<>uid://bl6s2pajcq2js::::res://assets/legacy_fantasy/Trees/Tree-Assets.png<>uid://8e6slyip6fhg::::res://assets/legacy_fantasy/Background/Background.png<>uid://ba6c8le4sw2wp::::res://assets/legacy_fantasy/Trees/Background-Hills1.png<>uid://bs15kny8hxcim::::res://assets/legacy_fantasy/Trees/Background-Trees1.png<>uid://bx5x6qyvhh2mc::::res://enemies/boar.tscn
+world.tscn::PackedScene::8552761736942707197::1709367390::0::1::::<><>::res://world.gd<>uid://b3rr0675x8266::::res://player.tscn<>uid://bl6s2pajcq2js::::res://assets/legacy_fantasy/Trees/Tree-Assets.png<>uid://8e6slyip6fhg::::res://assets/legacy_fantasy/Background/Background.png<>uid://ba6c8le4sw2wp::::res://assets/legacy_fantasy/Trees/Background-Hills1.png<>uid://bs15kny8hxcim::::res://assets/legacy_fantasy/Trees/Background-Trees1.png<>uid://bx5x6qyvhh2mc::::res://enemies/boar.tscn
 ::res://addons/::1700286372
 ::res://addons/com.timothyqiu.animation-resetter/::1700286372
 complete_tracks_dialog.gd::GDScript::-1::1700286372::0::1::::<>ConfirmationDialog<>::
@@ -32,8 +32,8 @@ Background.png::CompressedTexture2D::2173416672961032385::1664872680::1699149889
 Tree-Assets.png::CompressedTexture2D::3223635584655042928::1667208990::1699149826::1::::<><>::
 ::res://classes/::1700292650
 StateMachin.gd::GDScript::-1::1700292650::0::1::::StateMachin<>Node<>::
-::res://enemies/::1708849255
-boar.gd::GDScript::-1::1708849255::0::1::::<>Enemy<>::
-boar.tscn::PackedScene::4064148148847032910::1708849183::0::1::::<><>::uid://ufy0yq5vwjqw::::res://enemies/enemy.tscn<>uid://yj8wq5rnaq3n::::res://assets/legacy_fantasy/Boar/Idle-Sheet.png<>res://enemies/boar.gd<>uid://bt5ni4kxf8l21::::res://assets/legacy_fantasy/Boar/Hit-Sheet.png<>uid://c7ab4wo3b7b4y::::res://assets/legacy_fantasy/Boar/Walk-Base-Sheet.png<>uid://cs3sohj6k1fgq::::res://assets/legacy_fantasy/Boar/Run-Sheet.png
+::res://enemies/::1709367390
+boar.gd::GDScript::-1::1708849637::0::1::::<>Enemy<>::
+boar.tscn::PackedScene::4064148148847032910::1709367390::0::1::::<><>::uid://ufy0yq5vwjqw::::res://enemies/enemy.tscn<>uid://yj8wq5rnaq3n::::res://assets/legacy_fantasy/Boar/Idle-Sheet.png<>res://enemies/boar.gd<>uid://bt5ni4kxf8l21::::res://assets/legacy_fantasy/Boar/Hit-Sheet.png<>uid://c7ab4wo3b7b4y::::res://assets/legacy_fantasy/Boar/Walk-Base-Sheet.png<>uid://cs3sohj6k1fgq::::res://assets/legacy_fantasy/Boar/Run-Sheet.png
 enemy.gd::GDScript::-1::1702725739::0::1::::Enemy<>CharacterBody2D<>::
-enemy.tscn::PackedScene::1415601900874239642::1708849255::0::1::::<><>::res://enemies/enemy.gd<>res://classes/StateMachin.gd
+enemy.tscn::PackedScene::1415601900874239642::1709366772::0::1::::<><>::res://enemies/enemy.gd<>res://classes/StateMachin.gd

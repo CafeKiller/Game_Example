@@ -83,3 +83,7 @@ func transition_state(from: State, to: State) -> void:
 			animation_player.play("run")
 		
 			
+
+
+func _on_hurtbox_hurt(hitbox: Hitbox) -> void:
+	pass # Replace with function body.
