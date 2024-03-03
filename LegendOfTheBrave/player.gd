@@ -1,7 +1,7 @@
 """
-@file: 控制玩家对象
+@file: 玩家对象
 @author: CoffeeKiller
-@date: 2023_11_04
+@date: 2024_03_03 19:21:42
 """
 class_name Player
 extends CharacterBody2D
@@ -10,40 +10,46 @@ extends CharacterBody2D
 @enum State 玩家状态
 """
 enum State {
-	IDLE, # 闲置
-	RUNNING, # 跑动
-	JUMP, # 跳跃
-	FALL,# 下落
-	LANDING,# 着陆
-	WALL_SLIDING,
-	WALL_JUMP,
-	ATTACK_1, # 攻击
-	ATTACK_2,
-	ATTACK_3,
-	HURT,
-	DYING,
+	IDLE, 		 # 闲置
+	RUNNING, 	 # 跑动
+	JUMP, 		 # 跳跃
+	FALL,		 # 下落
+	LANDING,	 # 着陆
+	WALL_SLIDING,# 划墙下落
+	WALL_JUMP,	 # 划墙跳跃
+	ATTACK_1, 	 # 一段攻击
+	ATTACK_2,	 # 二段攻击
+	ATTACK_3,	 # 三段攻击
+	HURT,		 # 受击
+	DYING,		 # 濒死
 }
 
+# GROUND_STATES 状态分组, 该组内的状态都是处于地面状态的
 const GROUND_STATES := [
 	State.IDLE, State.RUNNING, State.LANDING,
 	State.ATTACK_1, State.ATTACK_2, State.ATTACK_3,
 ]
-const RUN_SPEED := 160.0
-const FLOOR_ACCELRATION := RUN_SPEED / 0.2 	# 处于地面时的加速度
-const AIR_ACCELRATION := RUN_SPEED / 0.1 	# 处于浮空时的加速度
-const JUMP_VELOCITY := -300.0
-const WALL_JUMP_VELOCITY := Vector2(380, -280)
+# 跑动时的加速度
+const RUN_SPEED := 160.0 
+# 处于地面时的加速度
+const FLOOR_ACCELRATION := RUN_SPEED / 0.2  
+# 处于浮空时的加速度
+const AIR_ACCELRATION := RUN_SPEED / 0.1    
+# 跳跃力度
+const JUMP_VELOCITY := -300.0 
+# 蹬墙跳角度
+const WALL_JUMP_VELOCITY := Vector2(380, -280) 
 # 常量, 击退力度, 默认:512
 const KNOCKBACK_AMOUNT := 512.0
 
+# can_combo 表示玩家当前是否触发combo(连击)
 @export var can_combo := false
 
 # 获取重力加速度 (通过项目设置获取)
-# var gravity := ProjectSettings.get("physics/2d/default_gravity") as float
 var default_gravity := ProjectSettings.get("physics/2d/default_gravity") as float
-var is_first_tick := false
-var is_combo_requested := false
-var pending_damage: Damage
+var is_first_tick := false # 触犯判断, 用于限制无限跳跃
+var is_combo_requested := false  # 连击判断, 判断当前是否触发连击
+var pending_damage: Damage # 待处理的伤害
 
 # 获取实体
 @onready var graphics: Node2D = $Graphics
@@ -90,10 +96,11 @@ func _unhandled_input(event: InputEvent) -> void:
 #		if should_jump:
 #			velocity.y = JUMP_VELOCITY
 
+# can_wall_slide 用于检测当前的墙面是否可以滑行
 func can_wall_slide() -> bool:
 	return is_on_wall() and hand_checker.is_colliding() and foot_checker.is_colliding()
 
-# 每帧物理调整
+## 物理帧处理函数, 物理帧更新时实际处理的相关逻辑
 func tick_physics(state: State, delta: float) -> void:
 	
 	# 处理玩家在受击无敌时间时的物理表现
@@ -253,14 +260,18 @@ func get_next_state(state: State) -> int:
 		
 	
 	return StateMachin.KEEP_CURRENT		
-	
+
+## 状态切换处理函数
+## 负责处理状态与状态之间切换时的相关处理逻辑
+## from: 原状态 to: 下一个状态	
 func transition_state(from: State, to: State) -> void:
 	
-#	print("<Player> [%s] %s => %s" % [
-#		Engine.get_physics_frames(),
-#		State.keys()[from] if from != 1 else "<START>",
-#		State.keys()[to],		
-#	])
+	# 打印玩家状态日志
+	print("<Player> [%s] %s => %s" % [
+		Engine.get_physics_frames(),
+		State.keys()[from] if from != 1 else "<START>",
+		State.keys()[to],		
+	])
 	
 	if from not in GROUND_STATES and to in GROUND_STATES:
 		coyote_timer.stop()

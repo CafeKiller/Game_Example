@@ -1,9 +1,15 @@
+"""
+@file: 主世界相关脚本
+@author: CoffeeKiller
+@update: 2024_03_03 17:30:56
+"""
+
 extends Node2D
 
 @onready var camera_2d: Camera2D = $Player/Camera2D
 @onready var tile_map: TileMap = $TileMap
 
-
+# 生命周期函数, 在节点加载完毕后进行调用
 func _ready() -> void:
 	# 获取地图内非空区域的矩形
 	var used := tile_map.get_used_rect().grow(-1)
