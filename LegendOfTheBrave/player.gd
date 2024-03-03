@@ -20,6 +20,8 @@ enum State {
 	ATTACK_1, # 攻击
 	ATTACK_2,
 	ATTACK_3,
+	HURT,
+	DYING,
 }
 
 const GROUND_STATES := [
@@ -31,6 +33,8 @@ const FLOOR_ACCELRATION := RUN_SPEED / 0.2 	# 处于地面时的加速度
 const AIR_ACCELRATION := RUN_SPEED / 0.1 	# 处于浮空时的加速度
 const JUMP_VELOCITY := -300.0
 const WALL_JUMP_VELOCITY := Vector2(380, -280)
+# 常量, 击退力度, 默认:512
+const KNOCKBACK_AMOUNT := 512.0
 
 @export var can_combo := false
 
@@ -39,15 +43,19 @@ const WALL_JUMP_VELOCITY := Vector2(380, -280)
 var default_gravity := ProjectSettings.get("physics/2d/default_gravity") as float
 var is_first_tick := false
 var is_combo_requested := false
+var pending_damage: Damage
 
 # 获取实体
 @onready var graphics: Node2D = $Graphics
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var jump_request_timer: Timer = $JumpRequestTimer
+@onready var invincible_timer: Timer = $InvincibleTimer # 受击无敌时间 计时器
 @onready var hand_checker: RayCast2D = $Graphics/HandChecker
 @onready var foot_checker: RayCast2D = $Graphics/FootChecker
 @onready var state_machin: Node = $StateMachin
+@onready var stats: Node = $Stats
+
 
 # 检测玩家输入
 func _unhandled_input(event: InputEvent) -> void:
@@ -88,6 +96,12 @@ func can_wall_slide() -> bool:
 # 每帧物理调整
 func tick_physics(state: State, delta: float) -> void:
 	
+	# 处理玩家在受击无敌时间时的物理表现
+	if invincible_timer.time_left > 0:
+		graphics.modulate.a = sin(Time.get_ticks_msec() / 20) * 0.5 + 0.5
+	else:
+		graphics.modulate.a = 1
+	
 	match state:
 		State.IDLE:
 			move(default_gravity, delta)
@@ -122,6 +136,9 @@ func tick_physics(state: State, delta: float) -> void:
 		State.ATTACK_1, State.ATTACK_2, State.ATTACK_3:
 			stand(default_gravity, delta)
 			
+		State.HURT, State.DYING:
+			stand(default_gravity, delta)
+			
 	is_first_tick = false
 	
 func move(gravity: float, delta: float) -> void:
@@ -149,8 +166,18 @@ func stand(gravity:float, delta: float) -> void:
 	
 	move_and_slide()
 	
+# 玩家死亡函数
+func die() -> void:
+	get_tree().reload_current_scene()
+	
 # 切换下一个状态 (自动调用)
-func get_next_state(state: State) -> State:
+func get_next_state(state: State) -> int:
+	
+	if stats.health == 0:
+		return StateMachin.KEEP_CURRENT if state == State.DYING else State.DYING
+		
+	if pending_damage:
+		return State.HURT
 	
 	var can_jump := is_on_floor() or coyote_timer.time_left > 0
 	var should_jump := can_jump and jump_request_timer.time_left > 0
@@ -219,9 +246,13 @@ func get_next_state(state: State) -> State:
 		State.ATTACK_3:
 			if not animation_player.is_playing():
 				return State.IDLE
+				
+		State.HURT:
+			if not animation_player.is_playing():
+				return State.IDLE
 		
 	
-	return state		
+	return StateMachin.KEEP_CURRENT		
 	
 func transition_state(from: State, to: State) -> void:
 	
@@ -277,9 +308,40 @@ func transition_state(from: State, to: State) -> void:
 			animation_player.play("attack_3")
 			is_combo_requested = false
 			
+		State.HURT:
+			animation_player.play("hurt")
+			# 角色受击,造成扣血
+			stats.health -= pending_damage.amount
+			
+			# 获取收到伤害的受击方向向量, 并计算受击力度
+			var dir := pending_damage.source.global_position.direction_to(global_position)
+			velocity = dir * KNOCKBACK_AMOUNT
+			
+			# 清除本次伤害
+			pending_damage = null
+			# 开启受击后无敌
+			invincible_timer.start()
+			
+		State.DYING:
+			animation_player.play("die")
+			# 死亡时不需要无敌时间了
+			invincible_timer.stop()
+			
 #	if to == State.WALL_JUMP:
 #		Engine.time_scale = 0.3
 #	if from == State.WALL_JUMP:
 #		Engine.time_scale = 1
 				
 	is_first_tick = true
+
+## 受击反应函数
+func _on_hurtbox_hurt(hitbox: Hitbox) -> void:
+	# 处理受击无敌时间, 在无敌时间内不会再受击
+	if invincible_timer.time_left > 0:
+		return
+
+	# Debug: 此处有一个问题, 以下的逻辑只会记录到最后一次伤害, 可以尝试使用数组进行优化
+	# 创建一次伤害, 并设置此次伤害的数值量, 并绑定伤害来源
+	pending_damage = Damage.new()
+	pending_damage.amount = 1
+	pending_damage.source = hitbox.owner

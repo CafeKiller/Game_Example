@@ -818,4 +818,4 @@ region_enabled = true
 region_rect = Rect2(210, 293, 124, 86)
 
 [node name="Boar" parent="." instance=ExtResource("7_8boek")]
-position = Vector2(856, 61)
+position = Vector2(319, 203)

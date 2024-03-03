@@ -1,11 +1,14 @@
 """
 @file: 通用状态机对象
 @author: CoffeeKiller
-@date: 2023_11_11
+@update: 2024_03_03 15:00:31
 """
 
 class_name StateMachin
 extends Node
+
+# 保持状态判位符
+const KEEP_CURRENT := -1
 
 var current_state: int = -1:
 	set(v):
@@ -22,7 +25,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	while true:
 		var next := owner.get_next_state(current_state) as int
-		if current_state == next:
+		if next == KEEP_CURRENT:
 			break
 		current_state = next
 		

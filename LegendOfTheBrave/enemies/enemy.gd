@@ -20,9 +20,16 @@ var default_gravity := ProjectSettings.get("physics/2d/default_gravity") as floa
 @onready var graphics: Node2D = $Graphics
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var state_machin: Node = $StateMachin
+@onready var stats: Node = $Stats
 
+# 角色移动处理函数
 func move(speed: float, delta: float) -> void:
 	velocity.x = move_toward(velocity.x, speed * direction, acceleration * delta)
 	velocity.y += default_gravity * delta
 	
 	move_and_slide()
+
+# 角色死亡处理函数
+func die() -> void:
+	queue_free()
+
