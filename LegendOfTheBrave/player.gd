@@ -50,6 +50,8 @@ const SLIDING_DURATION := 0.3
 const SLIDING_SPEED := 240.0
 # 进入landing状态所需的高度
 const LANDING_HEIGHT := 80.0
+# 每次滑铲所需要的能量
+const SLIDING_ENERGY := 4.0
 
 
 # can_combo 表示玩家当前是否触发combo(连击)
@@ -213,6 +215,8 @@ func can_wall_slide() -> bool:
 # should_slide 判断玩家当前位置是否可以进行滑铲
 func should_slide() -> bool:
 	if slide_request_timer.is_stopped():
+		return false
+	if stats.energy < SLIDING_ENERGY:
 		return false
 	return not foot_checker.is_colliding()
 	
@@ -396,6 +400,7 @@ func transition_state(from: State, to: State) -> void:
 		State.SLIDING_START:
 			animation_player.play("sliding_start")
 			slide_request_timer.stop()
+			stats.energy -= SLIDING_ENERGY
 			
 		State.SLIDING_LOOP:
 			animation_player.play("sliding_loop")
