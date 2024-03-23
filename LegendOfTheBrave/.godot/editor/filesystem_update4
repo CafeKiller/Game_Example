@@ -1,7 +1,6 @@
-res://ui/status_panel.tscn
-res://ui/status_panel.gd
-res://classes/Stats.gd
 res://player.tscn
+res://player.gd
 res://world.tscn
 res://enemies/boar.tscn
 res://enemies/enemy.tscn
+res://ui/status_panel.tscn
