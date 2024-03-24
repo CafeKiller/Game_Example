@@ -1,10 +1,11 @@
-res://globals/game.tscn
-res://globals/game.gd
-res://world.tscn
 res://player.tscn
 res://enemies/boar.tscn
 res://enemies/enemy.tscn
 res://ui/status_panel.tscn
 res://objects/mine_gate.tscn
-res://player.gd
-res://ui/status_panel.gd
+res://globals/game.tscn
+res://world.tscn
+res://worlds/forset.tscn
+res://worlds/cave.tscn
+res://assets/tiles.tres
+res://worlds/world.tscn
