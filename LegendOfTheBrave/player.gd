@@ -64,6 +64,7 @@ var is_first_tick := false # 触犯判断, 用于限制无限跳跃
 var is_combo_requested := false  # 连击判断, 判断当前是否触发连击
 var pending_damage: Damage # 待处理的伤害
 var fall_from_y : float # 玩家掉落时的高度
+var interacting_with: Array[Interactable]
 
 
 # 获取实体
@@ -77,10 +78,12 @@ var fall_from_y : float # 玩家掉落时的高度
 @onready var foot_checker: RayCast2D = $Graphics/FootChecker
 @onready var state_machin: Node = $StateMachin
 @onready var stats: Node = $Stats
+@onready var interaction_icon: AnimatedSprite2D = $InteractionIcon
 
 
 ## 物理帧处理函数, 物理帧更新时实际处理的相关逻辑
 func tick_physics(state: State, delta: float) -> void:
+	interaction_icon.visible = not interacting_with.is_empty()
 	
 	# 处理玩家在受击无敌时间时的物理表现
 	if invincible_timer.time_left > 0:
@@ -170,6 +173,19 @@ func slide(delte: float) -> void:
 # 玩家死亡函数
 func die() -> void:
 	get_tree().reload_current_scene()
+
+# 注册交互处理	
+func register_interactavle(v: Interactable) -> void:
+	# 玩家处于死亡状态时 不需要注册交互
+	if state_machin.current_state == State.DYING:
+		return
+	if v in interacting_with:
+		return
+	interacting_with.append(v)
+
+# 注销交互处理	
+func unregister_interactavle(v: Interactable) -> void:
+	interacting_with.erase(v) 
 	
 # 检测玩家输入
 func _unhandled_input(event: InputEvent) -> void:
@@ -192,6 +208,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	# 判断当前是否按下滑铲键, 并启动 滑铲定时器
 	if event.is_action_pressed("slide"):
 		slide_request_timer.start()
+		
+	# 判断当前是否按下E键
+	if event.is_action_pressed("interact") and interacting_with:
+		interacting_with.back().interact()
 		
 
 # func _physics_process(delta: float) -> void:
@@ -396,6 +416,7 @@ func transition_state(from: State, to: State) -> void:
 			animation_player.play("die")
 			# 死亡时不需要无敌时间了
 			invincible_timer.stop()
+			interacting_with.clear()
 			
 		State.SLIDING_START:
 			animation_player.play("sliding_start")
