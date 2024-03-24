@@ -3,11 +3,12 @@
 [ext_resource type="Script" path="res://world.gd" id="1_mgdfq"]
 [ext_resource type="PackedScene" uid="uid://b3rr0675x8266" path="res://player.tscn" id="2_ahu8m"]
 [ext_resource type="Texture2D" uid="uid://bl6s2pajcq2js" path="res://assets/legacy_fantasy/Trees/Tree-Assets.png" id="2_ml41h"]
+[ext_resource type="PackedScene" uid="uid://bp4tc4yyir051" path="res://objects/mine_gate.tscn" id="3_b2v4k"]
 [ext_resource type="Texture2D" uid="uid://8e6slyip6fhg" path="res://assets/legacy_fantasy/Background/Background.png" id="4_f4b8v"]
+[ext_resource type="Script" path="res://classes/EntryPoint.gd" id="4_psnxw"]
 [ext_resource type="Texture2D" uid="uid://ba6c8le4sw2wp" path="res://assets/legacy_fantasy/Trees/Background-Hills1.png" id="5_emjjo"]
 [ext_resource type="Texture2D" uid="uid://bs15kny8hxcim" path="res://assets/legacy_fantasy/Trees/Background-Trees1.png" id="6_7iclu"]
 [ext_resource type="PackedScene" uid="uid://bx5x6qyvhh2mc" path="res://enemies/boar.tscn" id="7_8boek"]
-[ext_resource type="Script" path="res://classes/Interactable.gd" id="8_jtof4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_frkbe"]
 texture = ExtResource("2_ml41h")
@@ -559,9 +560,6 @@ terrain_set_0/terrain_1/name = "Leaves"
 terrain_set_0/terrain_1/color = Color(0.5, 0.4375, 0.25, 1)
 sources/1 = SubResource("TileSetAtlasSource_frkbe")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_rup8b"]
-size = Vector2(16, 16)
-
 [node name="World" type="Node2D"]
 script = ExtResource("1_mgdfq")
 
@@ -586,8 +584,28 @@ layer_2/y_sort_origin = 0
 layer_2/z_index = 1
 layer_2/tile_data = PackedInt32Array(786457, 655361, 2, 917516, 589825, 2, 65550, 589825, 2, 917560, 524289, 3, 196647, 524289, 3, 327682, 851969, 1, 327689, 1310721, 1)
 
+[node name="BotMineGate" parent="TileMap" instance=ExtResource("3_b2v4k")]
+position = Vector2(874, 189.888)
+path = "res://world.tscn"
+entry_point = "TopEntry"
+
+[node name="TopMineGate" parent="TileMap" instance=ExtResource("3_b2v4k")]
+position = Vector2(106, -79.3714)
+scale = Vector2(-1, 1)
+path = "res://world.tscn"
+entry_point = "BottomEntry"
+
+[node name="TopEntry" type="Marker2D" parent="TileMap"]
+position = Vector2(144, -32.1504)
+script = ExtResource("4_psnxw")
+
+[node name="BottomEntry" type="Marker2D" parent="TileMap"]
+position = Vector2(832, 233.091)
+script = ExtResource("4_psnxw")
+direction = -1
+
 [node name="Player" parent="." instance=ExtResource("2_ahu8m")]
-position = Vector2(83, 209)
+position = Vector2(498, 99)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(-1, -15)
@@ -689,12 +707,6 @@ texture = ExtResource("2_ml41h")
 region_enabled = true
 region_rect = Rect2(210, 101, 124, 86)
 
-[node name="Tree-assets4" type="Sprite2D" parent="Decorations/Background/Bushes"]
-position = Vector2(759, 229)
-texture = ExtResource("2_ml41h")
-region_enabled = true
-region_rect = Rect2(210, 5, 124, 86)
-
 [node name="Tree-assets5" type="Sprite2D" parent="Decorations/Background/Bushes"]
 position = Vector2(750, 109)
 texture = ExtResource("2_ml41h")
@@ -720,7 +732,7 @@ region_enabled = true
 region_rect = Rect2(210, 101, 124, 86)
 
 [node name="Tree-assets9" type="Sprite2D" parent="Decorations/Background/Bushes"]
-position = Vector2(105, -81)
+position = Vector2(165, -59)
 texture = ExtResource("2_ml41h")
 region_enabled = true
 region_rect = Rect2(210, 101, 124, 86)
@@ -743,11 +755,23 @@ texture = ExtResource("2_ml41h")
 region_enabled = true
 region_rect = Rect2(210, 5, 124, 86)
 
+[node name="Tree-assets13" type="Sprite2D" parent="Decorations/Background/Bushes"]
+position = Vector2(769, 238)
+texture = ExtResource("2_ml41h")
+region_enabled = true
+region_rect = Rect2(210, 293, 124, 86)
+
 [node name="Foreground" type="ParallaxBackground" parent="Decorations"]
 layer = 1
 
 [node name="Bushes" type="ParallaxLayer" parent="Decorations/Foreground"]
 motion_scale = Vector2(1.1, 1.1)
+
+[node name="Tree-assets13" type="Sprite2D" parent="Decorations/Foreground/Bushes"]
+position = Vector2(864, 271)
+texture = ExtResource("2_ml41h")
+region_enabled = true
+region_rect = Rect2(210, 5, 124, 86)
 
 [node name="Tree-assets" type="Sprite2D" parent="Decorations/Foreground/Bushes"]
 position = Vector2(29, 256)
@@ -786,10 +810,12 @@ region_enabled = true
 region_rect = Rect2(210, 293, 124, 86)
 
 [node name="Tree-assets7" type="Sprite2D" parent="Decorations/Foreground/Bushes"]
-position = Vector2(961, 250)
+position = Vector2(951, 264)
 texture = ExtResource("2_ml41h")
 region_enabled = true
 region_rect = Rect2(210, 293, 124, 86)
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
 
 [node name="Tree-assets8" type="Sprite2D" parent="Decorations/Foreground/Bushes"]
 position = Vector2(983, 106)
@@ -804,30 +830,23 @@ region_enabled = true
 region_rect = Rect2(210, 293, 124, 86)
 
 [node name="Tree-assets10" type="Sprite2D" parent="Decorations/Foreground/Bushes"]
-position = Vector2(15, -215)
+position = Vector2(23, -173)
 texture = ExtResource("2_ml41h")
 region_enabled = true
 region_rect = Rect2(210, 293, 124, 86)
 
 [node name="Tree-assets11" type="Sprite2D" parent="Decorations/Foreground/Bushes"]
-position = Vector2(273, 2)
+position = Vector2(259, -11)
 texture = ExtResource("2_ml41h")
 region_enabled = true
 region_rect = Rect2(210, 293, 124, 86)
 
 [node name="Tree-assets12" type="Sprite2D" parent="Decorations/Foreground/Bushes"]
-position = Vector2(90, -32)
+position = Vector2(178, -16)
+scale = Vector2(1, -1)
 texture = ExtResource("2_ml41h")
 region_enabled = true
 region_rect = Rect2(210, 293, 124, 86)
 
 [node name="Boar" parent="." instance=ExtResource("7_8boek")]
 position = Vector2(319, 203)
-
-[node name="Interactable" type="Area2D" parent="."]
-position = Vector2(904, 232)
-script = ExtResource("8_jtof4")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable"]
-position = Vector2(0, -1)
-shape = SubResource("RectangleShape2D_rup8b")

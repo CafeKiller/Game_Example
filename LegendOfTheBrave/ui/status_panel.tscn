@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cmfdo23mra5wt"]
+[gd_scene load_steps=12 format=3 uid="uid://cmfdo23mra5wt"]
 
 [ext_resource type="Texture2D" uid="uid://cxpmn1vywnx8q" path="res://assets/legacy_fantasy/HUD.png" id="1_2o2yk"]
 [ext_resource type="Script" path="res://ui/status_panel.gd" id="1_43bli"]
@@ -16,23 +16,27 @@ region_rect = Rect2(323, 203, 26, 26)
 atlas = ExtResource("2_kk8a1")
 region = Rect2(22, 24, 11, 11)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_26ktt"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_1k5ud"]
 atlas = ExtResource("1_2o2yk")
 region = Rect2(307, 21, 58, 6)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ieijp"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_pqh6t"]
 atlas = ExtResource("1_2o2yk")
 region = Rect2(308, 118, 56, 4)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_se4v4"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_qbbj2"]
 atlas = ExtResource("1_2o2yk")
-region = Rect2(308, 39, 56, 2)
+region = Rect2(308, 86, 56, 4)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_2rad1"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_tvcuv"]
 atlas = ExtResource("1_2o2yk")
 region = Rect2(307, 6, 58, 4)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_i6ohj"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_dbd3k"]
+atlas = ExtResource("1_2o2yk")
+region = Rect2(308, 39, 56, 2)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wt8vw"]
 atlas = ExtResource("1_2o2yk")
 region = Rect2(308, 39, 56, 2)
 
@@ -60,8 +64,8 @@ size_flags_vertical = 4
 max_value = 1.0
 step = 0.0
 value = 1.0
-texture_over = SubResource("AtlasTexture_26ktt")
-texture_progress = SubResource("AtlasTexture_ieijp")
+texture_over = SubResource("AtlasTexture_1k5ud")
+texture_progress = SubResource("AtlasTexture_pqh6t")
 texture_progress_offset = Vector2(1, 1)
 
 [node name="EasedHealthBar" type="TextureProgressBar" parent="PlayerStateBox/HealthBar"]
@@ -76,7 +80,7 @@ size_flags_vertical = 4
 max_value = 1.0
 step = 0.0
 value = 1.0
-texture_progress = SubResource("AtlasTexture_se4v4")
+texture_progress = SubResource("AtlasTexture_qbbj2")
 texture_progress_offset = Vector2(1, 1)
 
 [node name="EnergyBar" type="TextureProgressBar" parent="PlayerStateBox"]
@@ -85,8 +89,8 @@ size_flags_vertical = 4
 max_value = 1.0
 step = 0.0
 value = 1.0
-texture_over = SubResource("AtlasTexture_2rad1")
-texture_progress = SubResource("AtlasTexture_i6ohj")
+texture_over = SubResource("AtlasTexture_tvcuv")
+texture_progress = SubResource("AtlasTexture_dbd3k")
 texture_progress_offset = Vector2(1, 1)
 
 [node name="EasedEnergyBar" type="TextureProgressBar" parent="PlayerStateBox/EnergyBar"]
@@ -101,7 +105,7 @@ size_flags_vertical = 4
 max_value = 1.0
 step = 0.0
 value = 1.0
-texture_progress = SubResource("AtlasTexture_se4v4")
+texture_progress = SubResource("AtlasTexture_wt8vw")
 texture_progress_offset = Vector2(1, 1)
 tint_under = Color(0.470588, 0.470588, 0.470588, 1)
 tint_over = Color(0.694118, 0.694118, 0.694118, 1)

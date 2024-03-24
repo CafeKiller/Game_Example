@@ -1,7 +1,10 @@
-res://player.tscn
-res://classes/Interactable.gd
-res://player.gd
+res://globals/game.tscn
+res://globals/game.gd
 res://world.tscn
+res://player.tscn
 res://enemies/boar.tscn
 res://enemies/enemy.tscn
 res://ui/status_panel.tscn
+res://objects/mine_gate.tscn
+res://player.gd
+res://ui/status_panel.gd

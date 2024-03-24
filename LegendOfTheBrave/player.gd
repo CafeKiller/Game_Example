@@ -6,6 +6,11 @@
 class_name Player
 extends CharacterBody2D
 
+enum Direction {
+	LEFT = -1,
+	RIGHT = +1,
+}
+
 """
 @enum State 玩家状态
 """
@@ -56,6 +61,12 @@ const SLIDING_ENERGY := 4.0
 
 # can_combo 表示玩家当前是否触发combo(连击)
 @export var can_combo := false
+@export var direction := Direction.RIGHT:
+	set(v):
+		direction = v
+		if not is_node_ready():
+			await ready
+		graphics.scale.x = direction
 
 
 # 获取重力加速度 (通过项目设置获取)
@@ -77,7 +88,7 @@ var interacting_with: Array[Interactable]
 @onready var hand_checker: RayCast2D = $Graphics/HandChecker
 @onready var foot_checker: RayCast2D = $Graphics/FootChecker
 @onready var state_machin: Node = $StateMachin
-@onready var stats: Node = $Stats
+@onready var stats: Node = Game.player_stats
 @onready var interaction_icon: AnimatedSprite2D = $InteractionIcon
 
 
@@ -99,7 +110,7 @@ func tick_physics(state: State, delta: float) -> void:
 			move(default_gravity, delta)
 			
 		State.JUMP:
-			var temp = 0.0 if is_first_tick else default_gravity
+			var temp = 0.0 if is_first_tick else default_gravity 
 			move(temp, delta)
 			
 		State.FALL:
@@ -111,13 +122,13 @@ func tick_physics(state: State, delta: float) -> void:
 			
 		State.WALL_SLIDING:
 			move(default_gravity / 2, delta)
-			graphics.scale.x = get_wall_normal().x
+			direction = Direction.LEFT if get_wall_normal().x < 0 else Direction.RIGHT
 			
 		State.WALL_JUMP:
 			if state_machin.state_time < 0.1 :
 				var temp = 0.0 if is_first_tick else default_gravity
 				stand(temp, delta)
-				graphics.scale.x = get_wall_normal().x
+				direction = Direction.LEFT if get_wall_normal().x < 0 else Direction.RIGHT
 			else:
 				# var temp = 0.0 if is_first_tick else default_gravity
 				move(default_gravity, delta)
@@ -139,16 +150,16 @@ func tick_physics(state: State, delta: float) -> void:
 # 玩家移动处理函数	
 func move(gravity: float, delta: float) -> void:
 	# 获取玩家键盘输入
-	var direction := Input.get_axis("move_left", "move_right")
+	var movement := Input.get_axis("move_left", "move_right")
 	# 控制加速 地面的加速度 与 空中的加速度是不一样的.
 	var acceleration := FLOOR_ACCELRATION if is_on_floor() else AIR_ACCELRATION
 	# 为角色运动添加: 加速度系数
-	velocity.x = move_toward(velocity.x, direction * RUN_SPEED, acceleration * delta) 
+	velocity.x = move_toward(velocity.x, movement * RUN_SPEED, acceleration * delta) 
 	velocity.y += gravity * delta
 			
 	# 由于动画都是只展示一侧的, 需要在玩家向左移动时添加镜像反转
-	if not is_zero_approx(direction):
-		graphics.scale.x = -1 if direction < 0 else 1
+	if not is_zero_approx(movement):
+		graphics.scale.x = Direction.LEFT if movement < 0 else Direction.RIGHT
 	
 	move_and_slide()
 	
@@ -214,20 +225,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		interacting_with.back().interact()
 		
 
-# func _physics_process(delta: float) -> void:
-# 	# 获取玩家键盘输入
-# 	var direction := Input.get_axis("move_left", "move_right")
-# 	# 控制加速 地面的加速度 与 空中的加速度是不一样的.
-# 	var acceleration := FLOOR_ACCELRATION if is_on_floor() else AIR_ACCELRATION
-# 	# 为角色运动添加: 加速度系数
-# 	velocity.x = move_toward(velocity.x, direction * RUN_SPEED, acceleration * delta) 
-# 	velocity.y += gravity * delta
-#	# 设置郊狼时间 让角色在浮空的一定时间内也可以完成跳跃操作
-#		var can_jump := is_on_floor() or coyote_timer.time_left > 0
-#		var should_jump := can_jump and jump_request_timer.time_left > 0
-#		if should_jump:
-#			velocity.y = JUMP_VELOCITY
-
 # can_wall_slide 用于检测当前的墙面是否可以滑行
 func can_wall_slide() -> bool:
 	return is_on_wall() and hand_checker.is_colliding() and foot_checker.is_colliding()
@@ -257,8 +254,8 @@ func get_next_state(state: State) -> int:
 	if state in GROUND_STATES and not is_on_floor():
 		return State.FALL
 	
-	var direction := Input.get_axis("move_left", "move_right")
-	var is_still := is_zero_approx(direction) and is_zero_approx(velocity.x)
+	var movement := Input.get_axis("move_left", "move_right")
+	var is_still := is_zero_approx(movement) and is_zero_approx(velocity.x)
 	
 	match state:
 		State.IDLE:

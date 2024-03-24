@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://bp4tc4yyir051"]
+
+[ext_resource type="Script" path="res://classes/Teleporter.gd" id="1_md0g5"]
+[ext_resource type="Texture2D" uid="uid://c76sns3j2fugy" path="res://assets/legacy_fantasy/Buildings.png" id="2_b4i4j"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0hkh4"]
+size = Vector2(61, 69)
+
+[node name="MineGate" type="Area2D"]
+script = ExtResource("1_md0g5")
+
+[node name="Buildings" type="Sprite2D" parent="."]
+position = Vector2(-1, -1)
+texture = ExtResource("2_b4i4j")
+region_enabled = true
+region_rect = Rect2(272, 208, 128, 160)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.5, 17.5)
+shape = SubResource("RectangleShape2D_0hkh4")

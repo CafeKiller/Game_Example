@@ -1,6 +1,8 @@
-res://assets/gdb-gamepad-2
+res://globals
 res://classes
+res://
+res://objects
+res://assets/gdb-gamepad-2
 E:/Resource/Fonts/FiraCode
 res://ui
 res://enemies
-res://
