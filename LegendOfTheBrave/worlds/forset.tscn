@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://dkucsnbpv1pft"]
 
-[ext_resource type="Script" path="res://world.gd" id="1_5m2xo"]
+[ext_resource type="Script" path="res://worlds/world.gd" id="1_fd2er"]
 [ext_resource type="Texture2D" uid="uid://bl6s2pajcq2js" path="res://assets/legacy_fantasy/Trees/Tree-Assets.png" id="2_hcnwx"]
 [ext_resource type="PackedScene" uid="uid://bp4tc4yyir051" path="res://objects/mine_gate.tscn" id="3_6r6nx"]
 [ext_resource type="Script" path="res://classes/EntryPoint.gd" id="4_0vxyt"]
@@ -561,7 +561,7 @@ terrain_set_0/terrain_1/color = Color(0.5, 0.4375, 0.25, 1)
 sources/1 = SubResource("TileSetAtlasSource_frkbe")
 
 [node name="World" type="Node2D"]
-script = ExtResource("1_5m2xo")
+script = ExtResource("1_fd2er")
 
 [node name="TileMap" type="TileMap" parent="."]
 scale = Vector2(1, 0.995321)

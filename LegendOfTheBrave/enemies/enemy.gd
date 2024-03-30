@@ -31,6 +31,9 @@ var default_gravity := ProjectSettings.get("physics/2d/default_gravity") as floa
 @onready var state_machin: Node = $StateMachin
 @onready var stats: Node = $Stats
 
+func _ready() -> void:
+	add_to_group("enemies")
+
 # 角色移动处理函数
 func move(speed: float, delta: float) -> void:
 	# move_toward 内置位置移动函数
