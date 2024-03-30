@@ -92,6 +92,10 @@ var interacting_with: Array[Interactable]
 @onready var interaction_icon: AnimatedSprite2D = $InteractionIcon
 
 
+func _ready() -> void:
+	stand(default_gravity, 0.01)
+
+
 ## 物理帧处理函数, 物理帧更新时实际处理的相关逻辑
 func tick_physics(state: State, delta: float) -> void:
 	interaction_icon.visible = not interacting_with.is_empty()
@@ -414,6 +418,8 @@ func transition_state(from: State, to: State) -> void:
 			# 死亡时不需要无敌时间了
 			invincible_timer.stop()
 			interacting_with.clear()
+			# FIXME
+			stats.health = 1
 			
 		State.SLIDING_START:
 			animation_player.play("sliding_start")

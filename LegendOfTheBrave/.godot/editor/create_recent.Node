@@ -1,3 +1,5 @@
+CanvasLayer
+ColorRect
 EntryPoint
 TileMap
 ParallaxLayer
@@ -9,7 +11,6 @@ Teleporter
 Interactable
 AnimatedSprite2D
 VBoxContainer
-CanvasLayer
 TextureProgressBar
 PanelContainer
 TextureRect
