@@ -10,3 +10,6 @@ res://objects/mine_gate.tscn
 res://globals/game.gd
 res://worlds/world.gd
 res://enemies/enemy.gd
+res://classes/Stats.gd
+res://classes/Teleporter.gd
+res://ui/status_panel.gd
