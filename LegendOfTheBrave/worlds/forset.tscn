@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://dkucsnbpv1pft"]
+[gd_scene load_steps=13 format=3 uid="uid://dkucsnbpv1pft"]
 
 [ext_resource type="Script" path="res://worlds/world.gd" id="1_fd2er"]
 [ext_resource type="Texture2D" uid="uid://bl6s2pajcq2js" path="res://assets/legacy_fantasy/Trees/Tree-Assets.png" id="2_hcnwx"]
 [ext_resource type="PackedScene" uid="uid://bp4tc4yyir051" path="res://objects/mine_gate.tscn" id="3_6r6nx"]
 [ext_resource type="Script" path="res://classes/EntryPoint.gd" id="4_0vxyt"]
+[ext_resource type="PackedScene" uid="uid://bn2qt5cnhkb2b" path="res://objects/save_stone.tscn" id="5_7e8yp"]
 [ext_resource type="PackedScene" uid="uid://b3rr0675x8266" path="res://player.tscn" id="5_qq45v"]
 [ext_resource type="Texture2D" uid="uid://8e6slyip6fhg" path="res://assets/legacy_fantasy/Background/Background.png" id="6_i6l03"]
 [ext_resource type="Texture2D" uid="uid://ba6c8le4sw2wp" path="res://assets/legacy_fantasy/Trees/Background-Hills1.png" id="7_qggfp"]
@@ -601,6 +602,9 @@ script = ExtResource("4_0vxyt")
 position = Vector2(832, 233.091)
 script = ExtResource("4_0vxyt")
 direction = -1
+
+[node name="SaveStone" parent="TileMap" instance=ExtResource("5_7e8yp")]
+position = Vector2(64, 160.752)
 
 [node name="Player" parent="." instance=ExtResource("5_qq45v")]
 position = Vector2(496, 128)

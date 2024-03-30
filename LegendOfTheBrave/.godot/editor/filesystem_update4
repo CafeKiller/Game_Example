@@ -13,3 +13,7 @@ res://enemies/enemy.gd
 res://classes/Stats.gd
 res://classes/Teleporter.gd
 res://ui/status_panel.gd
+res://objects/save_stone.tscn
+res://objects/save_stone.gd
+res://assets/vignette.gdshader
+res://globals/vignette.tscn

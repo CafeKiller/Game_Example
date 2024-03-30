@@ -1,9 +1,9 @@
-res://worlds
-res://assets
 res://globals
+res://assets
+res://objects
+res://worlds
 res://classes
 res://
-res://objects
 res://assets/gdb-gamepad-2
 E:/Resource/Fonts/FiraCode
 res://ui
